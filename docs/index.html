@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Vuoi fare pace?</title>
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+  body {
+    width: 100%;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #fff0f3 0%, #ffe0e6 50%, #ffc0cb 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    position: relative;
+    overflow: hidden;
+    font-family: 'Poppins', sans-serif;
+    -webkit-user-select: none;
+    user-select: none;
+  }
+
+  /* Immagini rimosse: .sfondo-img e .orsetto-piccolo nascosti */
+  .sfondo-img {
+    display: none;
+  }
+
+  .sfondo-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(255,240,243,0.7) 0%, rgba(255,224,230,0.6) 50%, rgba(255,192,203,0.5) 100%);
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  .cuore {
+    position: absolute;
+    color: rgba(255, 107, 129, 0.25);
+    font-size: 24px;
+    animation: fluttua 6s ease-in-out infinite;
+    pointer-events: none;
+    z-index: 1;
+  }
+  @keyframes fluttua {
+    0%, 100% { transform: translateY(0) rotate(0deg); opacity: 0.3; }
+    50% { transform: translateY(-40px) rotate(10deg); opacity: 0.8; }
+  }
+
+  .titolo {
+    font-family: 'Great Vibes', cursive;
+    font-size: 52px;
+    color: #e8435f;
+    text-shadow: 2px 2px 8px rgba(255,255,255,0.9), 0 0 20px rgba(232, 67, 95, 0.3);
+    margin-bottom: 40px;
+    animation: entrata 1s ease-out;
+    z-index: 2;
+    text-align: center;
+  }
+  @keyframes entrata {
+    from { opacity: 0; transform: translateY(-30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .bottoni {
+    display: flex;
+    gap: 30px;
+    animation: entrata 1.2s ease-out;
+    z-index: 2;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .btn {
+    padding: 16px 48px;
+    border: none;
+    border-radius: 50px;
+    font-size: 20px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    font-family: 'Poppins', sans-serif;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+
+  .btn-si {
+    background: linear-gradient(135deg, #ff6b81, #e8435f);
+    color: white;
+  }
+  .btn-si:active {
+    transform: scale(1.08);
+    box-shadow: 0 12px 35px rgba(232, 67, 95, 0.4);
+  }
+
+  .btn-no {
+    background: linear-gradient(135deg, #a0a0a0, #808080);
+    color: white;
+    position: relative;
+  }
+
+  .biglietto-container {
+    display: none;
+    perspective: 1000px;
+    margin-top: 30px;
+    animation: entrata 0.8s ease-out;
+    z-index: 2;
+  }
+
+  .biglietto {
+    width: 320px;
+    min-height: 420px;
+    background: rgba(255, 255, 255, 0.92);
+    border-radius: 16px;
+    box-shadow: 0 20px 60px rgba(232, 67, 95, 0.25), inset 0 0 0 3px rgba(255, 107, 129, 0.3);
+    position: relative;
+    cursor: pointer;
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    transform-style: preserve-3d;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    text-align: center;
+    -webkit-backdrop-filter: blur(5px);
+    backdrop-filter: blur(5px);
+  }
+
+  .biglietto:active {
+    transform: rotateY(5deg) rotateX(-3deg) scale(1.02);
+  }
+
+  .biglietto-aperto {
+    width: 360px;
+    min-height: 500px;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 16px;
+    box-shadow: 0 25px 70px rgba(232, 67, 95, 0.3);
+    padding: 28px;
+    position: relative;
+    animation: apriBiglietto 0.7s ease-out;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    z-index: 2;
+    -webkit-backdrop-filter: blur(5px);
+    backdrop-filter: blur(5px);
+  }
+
+  @keyframes apriBiglietto {
+    from { opacity: 0; transform: scale(0.7) rotate(-5deg); }
+    to { opacity: 1; transform: scale(1) rotate(0deg); }
+  }
+
+  .cuore-chiuso {
+    font-size: 80px;
+    animation: battito 1.5s ease-in-out infinite;
+    margin-bottom: 10px;
+  }
+  @keyframes battito {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.15); }
+  }
+
+  .testo-chiuso {
+    font-family: 'Great Vibes', cursive;
+    font-size: 28px;
+    color: #e8435f;
+  }
+
+  .testo-chiuso small {
+    font-family: 'Poppins', sans-serif;
+    font-size: 13px;
+    color: #999;
+    display: block;
+    margin-top: 8px;
+  }
+
+  .cuore-aperto {
+    font-size: 40px;
+    margin-bottom: 12px;
+    animation: battito 1.2s ease-in-out infinite;
+  }
+
+  .messaggio {
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+    line-height: 1.7;
+    color: #5a3a42;
+    text-align: center;
+    overflow-y: auto;
+    max-height: 380px;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .firma {
+    margin-top: 16px;
+    font-family: 'Great Vibes', cursive;
+    font-size: 22px;
+    color: #e8435f;
+  }
+
+  .nastro {
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 24px;
+    background: linear-gradient(90deg, #ff6b81, #e8435f);
+    border-radius: 4px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+  }
+
+  .nastro::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 0;
+    width: 0;
+    height: 0;
+    border-left: 40px solid #e8435f;
+    border-right: 40px solid #e8435f;
+    border-bottom: 8px solid transparent;
+  }
+
+  .btn-chiudi {
+    margin-top: 16px;
+    padding: 8px 24px;
+    border: 2px solid #ff6b81;
+    background: transparent;
+    color: #e8435f;
+    border-radius: 25px;
+    cursor: pointer;
+    font-family: 'Poppins', sans-serif;
+    font-size: 13px;
+    transition: all 0.3s;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+  .btn-chiudi:active {
+    background: #ff6b81;
+    color: white;
+  }
+
+  .orsetto-piccolo {
+    display: none; /* immagine rimossa */
+  }
+
+  @media (max-width: 480px) {
+    .titolo { font-size: 36px; }
+    .biglietto { width: 280px; min-height: 360px; }
+    .biglietto-aperto { width: 300px; min-height: 420px; padding: 20px; }
+    .btn { padding: 14px 36px; font-size: 18px; }
+    .messaggio { font-size: 13px; max-height: 300px; }
+    .orsetto-piccolo { width: 60px; height: 60px; }
+  }
+</style>
+</head>
+<body>
+
+  <div class="sfondo-img"></div>
+  <div class="sfondo-overlay"></div>
+
+  <div class="cuore" style="top:10%; left:5%; animation-delay:0s;">❤️</div>
+  <div class="cuore" style="top:20%; right:8%; animation-delay:1s;">💕</div>
+  <div class="cuore" style="top:60%; left:3%; animation-delay:2s;">💖</div>
+  <div class="cuore" style="top:70%; right:5%; animation-delay:3s;">💗</div>
+  <div class="cuore" style="top:40%; left:90%; animation-delay:1.5s;">💝</div>
+  <div class="cuore" style="top:85%; left:15%; animation-delay:2.5s;">❤️</div>
+
+  <div class="titolo" id="titolo">Vuoi fare pace?</div>
+
+  <div class="bottoni" id="bottoni">
+    <button class="btn btn-si" id="btnSi" onclick="cliccaSi()">Sì 💕</button>
+    <button class="btn btn-no" id="btnNo" onmouseover="scappaNo()" ontouchstart="scappaNo()">No 😢</button>
+  </div>
+
+  <div class="biglietto-container" id="bigliettoChiuso">
+    <div class="biglietto" onclick="apriBiglietto()">
+      <div class="nastro"></div>
+      <div class="cuore-chiuso">💌</div>
+      <div class="testo-chiuso">
+        Per te, amore
+        <small>(clicca per aprire)</small>
+      </div>
+    </div>
+  </div>
+
+  <div class="biglietto-aperto" id="bigliettoAperto">
+    <div class="nastro"></div>
+    <div class="cuore-aperto">🧡</div>
+    <div class="messaggio" id="messaggio"></div>
+    <div class="firma">Con tutto il mio amore</div>
+    <button class="btn-chiudi" onclick="chiudiBiglietto()">Chiudi il biglietto</button>
+  </div>
+
+  <div class="orsetto-piccolo"></div>
+
+<script>
+  const btnNo = document.getElementById('btnNo');
+  const body = document.body;
+  const bottoni = document.getElementById('bottoni');
+  const bigliettoChiuso = document.getElementById('bigliettoChiuso');
+  const bigliettoAperto = document.getElementById('bigliettoAperto');
+  const messaggio = document.getElementById('messaggio');
+  const titolo = document.getElementById('titolo');
+
+  const testoMessaggio = "Ciao amore, so che non mi vuoi parlare e forse non mi parlerai oggi. Il sì del messaggio di Kappista era per far credergli che lo facevo, però non l'ho più fatto dopo 6h e non è perché non avevo tempo, perché subito dopo avevo 2h di libertà dopo che gli ho detto sì. Era ovvio che non la facevo. Poi amore, io ti difendo sempre, oggi o domani credo che parlo con Kappista per dirgli tutto. Non voglio che la nostra relazione finisca così perché io ti amo tantissimo e non smetterò mai di amarti. Io amore sono dalla tua parte. Se ti è sembrato che siamo ritornati amichetti, no, non è così, perché tutte le risposte le ho date con disinvoltura perché non mi interessava di lui, perché ha fatto una cosa orribile. Amore, scusami tanto per quello che ho fatto, io ti amo tantissimo e ti amerò tantissimo 🧡";
+
+  function scappaNo() {
+    const maxX = body.clientWidth - btnNo.offsetWidth - 40;
+    const maxY = body.clientHeight - btnNo.offsetHeight - 40;
+    const x = Math.random() * maxX;
+    const y = Math.random() * maxY;
+    btnNo.style.position = 'absolute';
+    btnNo.style.left = x + 'px';
+    btnNo.style.top = y + 'px';
+    btnNo.style.transition = 'all 0.3s ease';
+  }
+
+  function cliccaSi() {
+    bottoni.style.display = 'none';
+    titolo.style.display = 'none';
+    bigliettoChiuso.style.display = 'block';
+  }
+
+  function apriBiglietto() {
+    bigliettoChiuso.style.display = 'none';
+    bigliettoAperto.style.display = 'flex';
+    messaggio.innerHTML = '';
+    let i = 0;
+    function scrivi() {
+      if (i < testoMessaggio.length) {
+        messaggio.innerHTML += testoMessaggio.charAt(i);
+        i++;
+        setTimeout(scrivi, 18);
+      }
+    }
+    scrivi();
+  }
+
+  function chiudiBiglietto() {
+    bigliettoAperto.style.display = 'none';
+    bigliettoChiuso.style.display = 'block';
+  }
+</script>
+
+</body>
+</html>
